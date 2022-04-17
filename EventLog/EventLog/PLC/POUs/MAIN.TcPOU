@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="MAIN" Id="{22568597-402f-4fc9-86bb-31654bff2593}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	// Variables for the FB_TcMessage example
+	bInitEvent1 	: BOOL; 
+	bInitEvent2 	: BOOL; 
+    bSend 			: BOOL; 
+	fbMessage 		: FB_TcMessage; 
+	
+	// Variables for the FB_TcAlarm example
+	bAlarmEvent		: BOOL;
+	bConfirm		: BOOL;
+	bDoSomething	: BOOL := FALSE;
+	fbAlarm			: FB_Alarm;
+
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// Message example
+
+IF bInitEvent1 THEN
+    bInitEvent1 := FALSE; 
+    fbMessage.CreateEx(TC_EVENTS.EventClass.Event1, 0); 
+END_IF
+
+IF bInitEvent2 THEN
+    bInitEvent2 := FALSE; 
+    fbMessage.CreateEx(TC_EVENTS.EventClass.Event2, 0); 
+END_IF
+
+IF bSend THEN 
+    bSend := FALSE; 
+    fbMessage.Send(0); 
+END_IF
+
+// Alarm Example
+fbAlarm(evtEntry:=TC_Events.EventClass.Event1, bEvt:=bAlarmEvent, bConfirm:=bConfirm);
+
+IF fbAlarm.eConfirmationState = TcEventConfirmationState.WaitForConfirmation THEN
+	bDoSomething := TRUE;
+ELSE
+	bDoSomething := FALSE;
+END_IF
+
+
+
+
+]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="88" Count="15" />
+      <LineId Id="109" Count="0" />
+      <LineId Id="108" Count="0" />
+      <LineId Id="111" Count="5" />
+      <LineId Id="110" Count="0" />
+      <LineId Id="104" Count="3" />
+      <LineId Id="47" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

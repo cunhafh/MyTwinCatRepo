@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="MAIN" Id="{d4186b0d-09d1-4d38-88b7-0469a78636af}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+
+VAR
+	fbReadEL7031		: FB_ReadCoE;
+	fbWriteEL7031		: FB_WriteCoE;
+	bReadNow			: BOOL;
+	bWriteNow			: BOOL;
+	nParam				: INT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[if bReadNow then
+	fbReadEL7031(
+		sNetId:='169.254.38.55.3.1', 
+		nSlaveAddr:=1002, 
+		nIndex:=16#8011, 
+		nIndexOffset:=16#01);
+	IF fbReadEL7031.bDoneReading THEN
+		bReadNow := FALSE;
+	END_IF	
+END_IF
+
+IF bWriteNow THEN
+	fbWriteEL7031(
+		sNetId:='169.254.38.55.3.1', 
+		nSlaveAddr:=1002, 
+		nIndex:=16#8011, 
+		nIndexOffset:=16#01, 
+		nParameter:=nParam);
+	IF fbWriteEL7031.bDoneWriting THEN
+		bWriteNow := FALSE;
+	END_IF
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="67" Count="0" />
+      <LineId Id="92" Count="4" />
+      <LineId Id="99" Count="0" />
+      <LineId Id="101" Count="1" />
+      <LineId Id="91" Count="0" />
+      <LineId Id="104" Count="0" />
+      <LineId Id="103" Count="0" />
+      <LineId Id="107" Count="4" />
+      <LineId Id="105" Count="0" />
+      <LineId Id="114" Count="2" />
+      <LineId Id="106" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

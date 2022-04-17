@@ -1,0 +1,22 @@
+.TcHmi_Controls_Helpers_Popup {
+    --tchmi-background: #ffffff;
+    --tchmi-text-color: #4c6374;
+    --tchmi-invalid-color: #e52833;
+    background: var(--tchmi-background);
+    box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.6);
+    font-size: 12px;
+}
+
+.TcHmi_Controls_Helpers_Popup > h1 {
+    font-size: 18px;
+    font-weight: normal;
+    color: var(--tchmi-text-color);
+}
+
+.TcHmi_Controls_Helpers_Popup-content {
+    color: var(--tchmi-text-color);
+}
+
+.TcHmi_Controls_Helpers_Popup div.with-validation.invalid::after {
+    border: 1px solid var(--tchmi-invalid-color);
+}

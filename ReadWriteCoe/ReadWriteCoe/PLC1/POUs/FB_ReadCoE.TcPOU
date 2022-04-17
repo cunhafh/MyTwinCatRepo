@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FB_ReadCoE" Id="{069f420b-93e5-431e-93c0-caa251f12ccf}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_ReadCoE
+
+VAR_INPUT
+	sNetId			: T_AmsNetId;
+	nSlaveAddr		: UINT;
+	nIndex			: WORD;
+	nIndexOffset	: BYTE;
+END_VAR
+
+VAR_OUTPUT
+	nParameter		: INT;
+	bDoneReading	: BOOL;
+	bError			: BOOL;
+END_VAR
+
+VAR
+	bExecute		: BOOL;
+	fbCoERead		: FB_EcCoESDoRead;
+	eCoEReadState	: (INIT, TRIGGER, READ, DONE);
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE eCoEReadState OF
+	
+	INIT:
+		bDoneReading := FALSE;
+		bExecute := FALSE;
+		eCoEReadState := TRIGGER;
+	
+	TRIGGER:
+		bExecute := TRUE;
+		eCoEReadState := READ;
+		
+	READ:
+		fbCoERead(
+			sNetId:=sNetId, 
+			nSlaveAddr:=nSlaveAddr, 
+			nSubIndex:=nIndexOffset, 
+			nIndex:=nIndex, 
+			pDstBuf:=ADR(nParameter), 
+			cbBufLen:=SIZEOF(nParameter), 
+			bExecute:=bExecute);
+			
+		bExecute := NOT bExecute;
+		
+		IF NOT fbCoeRead.bBusy THEN
+			eCoEReadState := DONE;
+		END_IF
+		
+	DONE:
+		IF fbCoeRead.bError THEN
+			bError := TRUE;
+		ELSE
+			bError := FALSE;
+		END_IF
+		bDoneReading := TRUE;
+		eCoEReadState := INIT;
+
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="FB_ReadCoE">
+      <LineId Id="72" Count="35" />
+      <LineId Id="24" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

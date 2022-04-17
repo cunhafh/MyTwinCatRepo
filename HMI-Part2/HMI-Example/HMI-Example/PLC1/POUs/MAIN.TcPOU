@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="MAIN" Id="{fbf1a1d8-33d2-4178-84e1-36bef6184fbb}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	fSin		: REAL;
+	fTheta		: REAL := -3.14;
+	fbSampling	: TON;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbSampling(In:=TRUE, PT:=T#1S);
+
+IF fbSampling.Q THEN
+	IF fTheta >= 3.14 THEN
+		fTheta := -3.14;
+	END_IF
+	fSin := SIN(fTheta);
+	fTheta := fTheta + 0.01;
+	fbSampling(In:=FALSE);
+END_IF
+
+]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="2" Count="0" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="13" Count="4" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="18" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

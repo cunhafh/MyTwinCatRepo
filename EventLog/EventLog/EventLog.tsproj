@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.20">
+	<DataTypes>
+		<DataType>
+			<Name GUID="{5FDA1965-84B5-493B-8B5C-2A9F186AAD31}" PersistentType="true">EventClass</Name>
+			<DisplayName TxtId=""><![CDATA[NewEventClass_DisplayText]]></DisplayName>
+			<EventId>
+				<Name Id="1">Event1</Name>
+				<DisplayName TxtId=""><![CDATA[This is a test]]></DisplayName>
+				<Comment TxtId=""><![CDATA[This is a comment for Event1]]></Comment>
+				<DescriptionText TxtId=""><![CDATA[This is a description for event 1]]></DescriptionText>
+				<DescriptionUrl TxtId=""><![CDATA[This is the URL for event 1]]></DescriptionUrl>
+				<Severity>Warning</Severity>
+				<CauseRemedy Idx="1">
+					<Cause TxtId=""><![CDATA[A bit was toggled]]></Cause>
+					<Remedy TxtId=""><![CDATA[Untoggle the bit]]></Remedy>
+				</CauseRemedy>
+				<Properties>
+					<Property>
+						<Name>Property1</Name>
+						<Value>100</Value>
+						<Desc><![CDATA[Property1]]></Desc>
+					</Property>
+					<Property>
+						<Name>Property2</Name>
+						<Value>200</Value>
+						<Desc><![CDATA[Property2]]></Desc>
+					</Property>
+				</Properties>
+			</EventId>
+			<EventId>
+				<Name Id="2">Event2</Name>
+				<DisplayName TxtId=""><![CDATA[Upon triggering the Event2 the PLC sends this msg]]></DisplayName>
+				<Comment TxtId=""><![CDATA[This is a comment]]></Comment>
+				<DescriptionText TxtId=""><![CDATA[This is a description]]></DescriptionText>
+				<DescriptionUrl TxtId=""><![CDATA[This is an URL]]></DescriptionUrl>
+				<Severity>Error</Severity>
+				<CauseRemedy Idx="1">
+					<Cause TxtId=""><![CDATA[A bit was toggled]]></Cause>
+					<Remedy TxtId=""><![CDATA[Untoggle that bit]]></Remedy>
+				</CauseRemedy>
+				<Properties>
+					<Property>
+						<Name>Property1</Name>
+						<Value>600</Value>
+						<Desc><![CDATA[Property 1]]></Desc>
+					</Property>
+					<Property>
+						<Name>Property2</Name>
+						<Value>1200</Value>
+						<Desc><![CDATA[Property 2]]></Desc>
+					</Property>
+				</Properties>
+			</EventId>
+			<Hides>
+				<Hide GUID="{51B1AF9D-ACF6-4DE1-A285-0C415441F725}"/>
+				<Hide GUID="{D11B1B06-CE0F-4463-AF44-5D9280764236}"/>
+			</Hides>
+		</DataType>
+		<DataType>
+			<Name GUID="{D11B1B06-CE0F-4463-AF44-5D9280764236}" PersistentType="true">EventClass</Name>
+			<DisplayName TxtId=""><![CDATA[NewEventClass_DisplayText]]></DisplayName>
+			<EventId>
+				<Name Id="1">Event1</Name>
+				<DisplayName TxtId=""><![CDATA[This is a test]]></DisplayName>
+				<Severity>Warning</Severity>
+			</EventId>
+			<Hides>
+				<Hide GUID="{51B1AF9D-ACF6-4DE1-A285-0C415441F725}"/>
+			</Hides>
+		</DataType>
+		<DataType>
+			<Name GUID="{51B1AF9D-ACF6-4DE1-A285-0C415441F725}" PersistentType="true">NewEventClass</Name>
+			<DisplayName TxtId=""><![CDATA[NewEventClass_DisplayText]]></DisplayName>
+			<EventId>
+				<Name Id="1">Event</Name>
+				<DisplayName TxtId=""><![CDATA[Event_DisplayText]]></DisplayName>
+				<Severity>Verbose</Severity>
+			</EventId>
+		</DataType>
+	</DataTypes>
+	<Project ProjectGUID="{8F55F7C3-87A7-4840-A669-BE2EF5416B95}" Target64Bit="true" ShowHideConfigurations="#x106">
+		<System>
+			<Tasks>
+				<Task Id="3" Priority="20" CycleTime="100000" AmsPort="350" AdtTasks="true">
+					<Name>PlcTask</Name>
+				</Task>
+			</Tasks>
+		</System>
+		<Plc>
+			<Project GUID="{69F01EF6-4C52-4E38-9D7B-BA584F1B9E30}" Name="PLC" PrjFilePath="PLC\PLC.plcproj" TmcFilePath="PLC\PLC.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="PLC\PLC.tmc">
+					<Name>PLC Instance</Name>
+					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
+					<Contexts>
+						<Context>
+							<Id NeedCalleeCall="true">0</Id>
+							<Name>PlcTask</Name>
+							<ManualConfig>
+								<OTCID>#x02010030</OTCID>
+							</ManualConfig>
+							<Priority>20</Priority>
+							<CycleTime>10000000</CycleTime>
+						</Context>
+					</Contexts>
+					<TaskPouOids>
+						<TaskPouOid Prio="20" OTCID="#x08502001"/>
+					</TaskPouOids>
+				</Instance>
+			</Project>
+		</Plc>
+	</Project>
+</TcSmProject>

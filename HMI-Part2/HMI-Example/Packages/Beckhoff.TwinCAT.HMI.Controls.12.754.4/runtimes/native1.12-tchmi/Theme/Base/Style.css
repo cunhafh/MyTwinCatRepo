@@ -1,0 +1,5 @@
+:root {
+    --tchmi-disabled-BeckhoffControl-textcolor: #636374;
+    --tchmi-disallowed-BeckhoffControl-textcolor: var(--tchmi-disabled-BeckhoffControl-textcolor);
+    --tchmi-disallowed-BeckhoffControl-interactionElement-overlaycolor: rgba(255, 255, 255, 0.5);
+}

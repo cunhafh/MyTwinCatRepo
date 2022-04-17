@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FB_WriteCoE" Id="{09573ff6-d8b7-42fc-b85e-49366cf46ffa}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_WriteCoE
+
+VAR_INPUT
+	sNetId			: T_AmsNetId;
+	nSlaveAddr 		: UINT;
+	nIndex			: WORD;
+	nIndexOffset	: BYTE;
+	nParameter		: INT;
+END_VAR
+
+VAR_OUTPUT
+	bDoneWriting	: BOOL;
+	bError			: BOOL;
+END_VAR
+
+VAR
+	bExecute		: BOOL;
+	fbCoeWrite		: FB_EcCoEsDoWrite;
+	eCoEWriteState	: (INIT, TRIGGER, WRITE, DONE);
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE eCoEWriteState OF
+	
+	INIT:
+		bDoneWriting := FALSE;
+		bExecute := FALSE;
+		eCoEWriteState := TRIGGER;
+		
+	TRIGGER:
+		bExecute := TRUE;
+		eCoEWriteState := WRITE;
+		
+	WRITE:
+		fbCoeWrite(
+			sNetId:=sNetId, 
+			nSlaveAddr:=nSlaveAddr, 
+			nSubIndex:=nIndexOffset, 
+			nIndex:=nIndex, 
+			pSrcBuf:=ADR(nParameter), 
+			cbBufLen:=SIZEOF(nParameter), 
+			bExecute:=bExecute);
+			
+		bExecute := NOT bExecute;
+		
+		IF NOT fbCoeWrite.bBusy THEN
+			eCoeWriteState := DONE;
+		END_IF
+	
+	DONE:
+		IF fbCoeWrite.bError THEN
+			bError := TRUE;
+		ELSE
+			bError := FALSE;
+		END_IF
+		bDoneWriting := TRUE;
+		eCoEWriteState := INIT;
+		
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="FB_WriteCoE">
+      <LineId Id="9" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="26" Count="5" />
+      <LineId Id="33" Count="3" />
+      <LineId Id="38" Count="6" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="49" Count="5" />
+      <LineId Id="56" Count="2" />
+      <LineId Id="60" Count="0" />
+      <LineId Id="62" Count="1" />
+      <LineId Id="61" Count="0" />
+      <LineId Id="64" Count="1" />
+      <LineId Id="55" Count="0" />
+      <LineId Id="24" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,51 @@
+.TcHmi_Controls_Helpers_Popup {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    overflow: hidden;
+    padding: 10px;
+}
+
+.TcHmi_Controls_Helpers_Popup > h1 {
+    flex-shrink: 0;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.TcHmi_Controls_Helpers_Popup .TcHmi_Controls_System_TcHmiControl {
+    position: relative;
+}
+
+.TcHmi_Controls_Helpers_Popup-content {
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin-bottom: 10px;
+}
+
+.TcHmi_Controls_Helpers_Popup-footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.TcHmi_Controls_Helpers_Popup-footer .TcHmi_Controls_System_TcHmiControl {
+    position: relative;
+}
+
+.TcHmi_Controls_Helpers_Popup-footer .TcHmi_Controls_System_TcHmiControl:not(:first-child) {
+    margin-left: 5px;
+}
+
+.TcHmi_Controls_Helpers_Popup-TextAndButtonsPrompt .TcHmi_Controls_Helpers_Popup-content {
+    white-space: pre;
+}
+
+.TcHmi_Controls_Helpers_Popup div.with-validation.invalid::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 1;
+}

@@ -1,0 +1,138 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "stringTypeArray": {
+      "configDescription": "descStringTypeArray",
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "timespan",
+          "description": "Width of the XAxis in milliseconds."
+        },
+        {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of the Start-Point."
+        },
+        {
+          "type": "string",
+          "enum": [ "Null", "First", "Latest" ],
+          "description": "Start-Point"
+        }
+      ]
+    }
+  },
+  "properties": {
+    "historizedSymbolList": {
+      "configDescription": "descHistorizedSymbolList",
+      "type": "object",
+      "propertyOrder": 1,
+      "additionalProperties": {
+        "configDescription": "descHistorizedSymbol",
+        "title": "TITLE_HISTORIZE_SYMBOL",
+        "optionMethod": {
+          "symbol": "ListSymbolNames"
+        },
+        "type": "object",
+        "properties": {
+          "maxEntries": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 10000
+          },
+          "interval": {
+            "type": "string",
+            "format": "timespan",
+            "default": "PT1S",
+            "formatMinimum": "PT0.01S"
+          },
+          "recordingEnabled": {
+            "type": "boolean",
+            "default": true
+          },
+          "rowLimit": {
+            "hidden": true,
+            "type": "integer",
+            "minimum": 1,
+            "default": 100000
+          }
+        },
+        "required": [ "maxEntries", "interval", "recordingEnabled", "rowLimit" ],
+        "additionalProperties": false
+      }
+    },
+    "enableBackup": {
+      "configDescription": "descEnableBackup",
+      "propertyOrder": 2,
+      "type": "boolean",
+      "default": false,
+      "defaultConfigurable": true
+    },
+    "maxBackups": {
+      "configDescription": "descMaxBackup",
+      "propertyOrder": 3,
+      "type": "integer",
+      "minimum": 1,
+      "default": 1,
+      "defaultConfigurable": true
+    },
+    "inMemory": {
+      "propertyOrder": 4,
+      "type": "boolean",
+      "default": false,
+      "configDescription": "descInMemory"
+    },
+    "vacuumOnStartup": {
+      "propertyOrder": 5,
+      "type": "boolean",
+      "default": false,
+      "configDescription": "descVacuumOnStartup"
+    },
+    "commitInterval": {
+        "propertyOrder": 6,
+        "type": "string",
+        "format": "timespan",
+        "default": "PT10S",
+        "configDescription": "descCommitInterval",
+        "formatMinimum": "PT1S",
+        "hidden": true
+      },
+    "mode": {
+      "hidden": true,
+      "propertyOrder": 7,
+      "type": "integer",
+      "default": 3,
+      "configDescription": "descMode",
+      "enum": [ 0, 1, 2, 3, 4, 5 ],
+      "options": [
+        {
+          "label": "ENUM_SYNCHRONOUS_EXTRA_PERSIST",
+          "value": 0
+        },
+        {
+          "label": "ENUM_SYNCHRONOUS_FULL_PERSIST",
+          "value": 1
+        },
+        {
+          "label": "ENUM_SYNCHRONOUS_FULL_MEMORY",
+          "value": 2
+        },
+        {
+          "label": "ENUM_SYNCHRONOUS_NORMAL_PERSIST",
+          "value": 3
+        },
+        {
+          "label": "ENUM_SYNCHRONOUS_OFF_PERSIST",
+          "value": 4
+        },
+        {
+          "label": "ENUM_SYNCHRONOUS_OFF_MEMORY",
+          "value": 5
+        }
+      ]
+    }
+  },
+  "required": [ "mode", "historizedSymbolList", "inMemory", "maxBackups", "enableBackup", "vacuumOnStartup", "commitInterval" ],
+  "type": "object",
+  "additionalProperties": false
+}

@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<TcEventSources Version="2">
+	<Source>
+		<GUID>{5FDA1965-84B5-493B-8B5C-2A9F186AAD31}</GUID>
+		<Name LcId="1033">NewEventClass_DisplayText</Name>
+		<Event>
+			<Id>1</Id>
+			<Message LcId="1033">This is a test</Message>
+			<Detail>
+				<Name>DescriptionText</Name>
+				<Text LcId="1033">This is a description for event 1</Text>
+			</Detail>
+			<Detail>
+				<Name>DescriptionUrl</Name>
+				<Text LcId="1033">This is the URL for event 1</Text>
+			</Detail>
+			<Detail>
+				<Name>Comment</Name>
+				<Text LcId="1033">This is a comment for Event1</Text>
+			</Detail>
+			<CauseRemedy Idx="1">
+				<Cause LcId="1033">A bit was toggled</Cause>
+				<Remedy LcId="1033">Untoggle the bit</Remedy>
+			</CauseRemedy>
+		</Event>
+		<Event>
+			<Id>2</Id>
+			<Message LcId="1033">Upon triggering the Event2 the PLC sends this msg</Message>
+			<Detail>
+				<Name>DescriptionText</Name>
+				<Text LcId="1033">This is a description</Text>
+			</Detail>
+			<Detail>
+				<Name>DescriptionUrl</Name>
+				<Text LcId="1033">This is an URL</Text>
+			</Detail>
+			<Detail>
+				<Name>Comment</Name>
+				<Text LcId="1033">This is a comment</Text>
+			</Detail>
+			<CauseRemedy Idx="1">
+				<Cause LcId="1033">A bit was toggled</Cause>
+				<Remedy LcId="1033">Untoggle that bit</Remedy>
+			</CauseRemedy>
+		</Event>
+	</Source>
+</TcEventSources>

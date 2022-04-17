@@ -1,0 +1,8 @@
+C:\Users\user\source\repos\AIBeckhoff\AIBeckhoff\bin\Debug\AIBeckhoff.exe.config
+C:\Users\user\source\repos\AIBeckhoff\AIBeckhoff\bin\Debug\AIBeckhoff.exe
+C:\Users\user\source\repos\AIBeckhoff\AIBeckhoff\bin\Debug\AIBeckhoff.pdb
+C:\Users\user\source\repos\AIBeckhoff\AIBeckhoff\obj\Debug\AIBeckhoff.csprojAssemblyReference.cache
+C:\Users\user\source\repos\AIBeckhoff\AIBeckhoff\obj\Debug\AIBeckhoff.csproj.ResolveComReference.cache
+C:\Users\user\source\repos\AIBeckhoff\AIBeckhoff\obj\Debug\AIBeckhoff.csproj.CoreCompileInputs.cache
+C:\Users\user\source\repos\AIBeckhoff\AIBeckhoff\obj\Debug\AIBeckhoff.exe
+C:\Users\user\source\repos\AIBeckhoff\AIBeckhoff\obj\Debug\AIBeckhoff.pdb

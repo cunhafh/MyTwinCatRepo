@@ -1,0 +1,241 @@
+{
+  "$schema": "../TcHmiSrv/schema/ExtensionSettings.Schema.json",
+  "version": "1.12.754.4",
+  "configVersion": "1.0.0.41",
+  "guid": "EB1F70B7-D988-4EFE-8AB5-6D46DD4CED09",
+  "visibility": "AlwaysShow",
+  "policies": [
+    "StrictPropertyValidation"
+  ],
+  "symbols": {
+    "GetTrendLineData": {
+      "userGroups": [
+        "__SystemUsers"
+      ],
+      "writeValue": {
+        "type": "object",
+        "properties": {
+          "chartName": {
+            "type": "string",
+            "description": "TrendLineChart name."
+          },
+          "xAxisStart": {
+            "$ref": "tchmi:server#/definitions/stringTypeArray"
+          },
+          "xAxisEnd": {
+            "$ref": "tchmi:server#/definitions/stringTypeArray"
+          },
+          "displayWidth": {
+            "type": "number",
+            "minimum": 2
+          },
+          "yAxes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "symbol"
+              ],
+              "properties": {
+                "symbol": {
+                  "type": "string",
+                  "description": "Symbol name."
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "chartName",
+          "yAxes",
+          "xAxisStart",
+          "displayWidth"
+        ]
+      },
+      "readValue": {
+        "function": true,
+        "type": "object",
+        "properties": {
+          "axesData": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "x": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Recording time of data point."
+                  },
+                  "y": {
+                    "type": "number",
+                    "description": "Historized value."
+                  },
+                  "error": {
+                    "type": "number"
+                  },
+                  "flags": {
+                    "type": "string",
+                    "description": "Historize flags."
+                  }
+                }
+              }
+            },
+            "description": "Array with sub-array for each symbol."
+          }
+        }
+      },
+      "sample": {
+        "description": "Get data for TrendLineChart named 'MyTrendChart1'",
+        "value": {
+          "chartName": "MyTrendChart1",
+          "xAxisStart": "2016-08-08T09:19:00",
+          "xAxisEnd": "PT10S",
+          "displayWidth": 600,
+          "yAxes": [
+            {
+              "symbol": "test"
+            },
+            {
+              "symbol": "testINT"
+            }
+          ]
+        }
+      },
+      "description": "Get an array containing recording time and its data point for each historized symbol."
+    },
+    "GetTrendLineWindow": {
+      "userGroups": [
+        "__SystemUsers"
+      ],
+      "writeValue": {
+        "type": "object",
+        "properties": {
+          "chartName": {
+            "type": "string",
+            "description": "TrendLineChart name."
+          },
+          "xAxisStart": {
+            "$ref": "tchmi:server#/definitions/stringTypeArray"
+          },
+          "xAxisEnd": {
+            "$ref": "tchmi:server#/definitions/stringTypeArray"
+          },
+          "yAxes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "symbol"
+              ],
+              "properties": {
+                "symbol": {
+                  "type": "string",
+                  "description": "Symbol name."
+                }
+              },
+              "additionalProperties": false
+            },
+            "description": "Start and end time for TrendLineChart."
+          }
+        },
+        "required": [
+          "chartName",
+          "yAxes",
+          "xAxisStart"
+        ]
+      },
+      "readValue": {
+        "function": true,
+        "type": "object",
+        "properties": {
+          "xAxisStart": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp from recording."
+          },
+          "xAxisEnd": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp from recording."
+          }
+        }
+      },
+      "sample": {
+        "description": "Get window for TrendChart named 'MyTrendChart1'",
+        "value": {
+          "chartName": "MyTrendChart1",
+          "xAxisStart": "2016-08-08T09:19:00",
+          "xAxisEnd": "PT10S",
+          "yAxes": [
+            {
+              "symbol": "test"
+            },
+            {
+              "symbol": "testINT"
+            }
+          ]
+        }
+      }
+    },
+    "HistorizeData": {
+      "userGroups": [
+        "__SystemUsers"
+      ],
+      "readValue": {
+        "function": true
+      }
+    },
+    "Diagnostics": {
+      "userGroups": [
+        "__SystemUsers"
+      ],
+      "readValue": {
+        "function": true,
+        "type": "object",
+        "readOnly": true,
+        "transient": true,
+        "properties": {
+          "database": {
+            "type": "object",
+            "readOnly": true,
+            "properties": {
+              "databaseSize": {
+                "allOf": [
+                  {
+                    "$ref": "tchmi:general#/definitions/INT64"
+                  },
+                  {
+                    "readOnly": true,
+                    "propertyOrder": 1,
+                    "displayClass": "byte"
+                  }
+                ]
+              },
+              "numEntries": {
+                "type": "integer",
+                "readOnly": true,
+                "propertyOrder": 2,
+                "configDescription": "descNumEntries"
+              },
+              "numEntriesLifetime": {
+                "type": "number",
+                "readOnly": true,
+                "propertyOrder": 3,
+                "configDescription": "descNumEntries"
+              }
+            },
+            "required": [
+              "numEntries",
+              "databaseSize"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "productVersion": "1.12.754.4",
+  "signature": "RmFV7cmLf+K++cvfWWSumhmT6xsa1Os1Y14Z7XO+wMNyLAT2LjH+5e1HRJS3LUGug7rDLpj1AVIaFnFTPeE3LjrT55t0W5CgBjJ7lBhNIEUDdXf00/6ucXzjeBl0k5n1x0eGPUegs54FwR3GIurbPnuXjHc3m1vhc+Md1DtL8W/wgrHgBzF6B7brcpsrPw/7eXN4qYZGJHtGbqDC5aywGBWTUfTEG4xED2ELgp6Ln0UGpXt6fe/fRRQ8ugqbjgeuU5UYdYAGPgxzp7KftIcNxqp05AuuJ12JsHyF8NE/3dLuK2Lw4iJ9GmPoqjJ4iuuxgwNIChP4AtTsems/1QSO9g=="
+}
