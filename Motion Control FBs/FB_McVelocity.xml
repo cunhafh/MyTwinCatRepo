@@ -1,0 +1,289 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://www.plcopen.org/xml/tc6_0200">
+  <fileHeader companyName="Beckhoff Automation GmbH" productName="TwinCAT PLC Control" productVersion="3.5.13.21" creationDateTime="2022-05-01T12:16:10.5796063" />
+  <contentHeader name="Untitled1" modificationDateTime="2022-05-01T12:16:10.5796063">
+    <coordinateInfo>
+      <fbd>
+        <scaling x="1" y="1" />
+      </fbd>
+      <ld>
+        <scaling x="1" y="1" />
+      </ld>
+      <sfc>
+        <scaling x="1" y="1" />
+      </sfc>
+    </coordinateInfo>
+    <addData>
+      <data name="http://www.3s-software.com/plcopenxml/projectinformation" handleUnknown="implementation">
+        <ProjectInformation />
+      </data>
+    </addData>
+  </contentHeader>
+  <types>
+    <dataTypes />
+    <pous>
+      <pou name="FB_McVelocity" pouType="functionBlock">
+        <interface>
+          <inputVars>
+            <variable name="bStart">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="bStop">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="fAxisAccel">
+              <type>
+                <REAL />
+              </type>
+            </variable>
+            <variable name="fAxisDecel">
+              <type>
+                <REAL />
+              </type>
+            </variable>
+            <variable name="eAxisDirection">
+              <type>
+                <derived name="MC_Direction" />
+              </type>
+            </variable>
+            <variable name="fAxisSpeed">
+              <type>
+                <REAL />
+              </type>
+            </variable>
+            <variable name="bReset">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+          </inputVars>
+          <outputVars>
+            <variable name="bError">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+          </outputVars>
+          <localVars>
+            <variable name="stAxis">
+              <type>
+                <derived name="AXIS_REF" />
+              </type>
+            </variable>
+            <variable name="fbAxisEnable">
+              <type>
+                <derived name="MC_Power" />
+              </type>
+            </variable>
+            <variable name="fbAxisVelocity">
+              <type>
+                <derived name="MC_MoveVelocity" />
+              </type>
+            </variable>
+            <variable name="fbAxisStop">
+              <type>
+                <derived name="MC_Stop" />
+              </type>
+            </variable>
+            <variable name="fbAxisReset">
+              <type>
+                <derived name="MC_Reset" />
+              </type>
+            </variable>
+            <variable name="bTogglePulse">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="fbStart">
+              <type>
+                <derived name="R_TRIG" />
+              </type>
+            </variable>
+            <variable name="fbStop">
+              <type>
+                <derived name="R_TRIG" />
+              </type>
+            </variable>
+            <variable name="eMcVelocityState">
+              <type>
+                <derived name="Implicit_Enum__FB_McVelocity__eMcVelocityState" />
+              </type>
+              <addData>
+                <data name="http://www.3s-software.com/plcopenxml/attributes" handleUnknown="implementation">
+                  <Attributes>
+                    <Attribute Name="implicit_enum_type" Value="" />
+                  </Attributes>
+                </data>
+              </addData>
+            </variable>
+          </localVars>
+          <addData>
+            <data name="http://www.3s-software.com/plcopenxml/attributes" handleUnknown="implementation">
+              <Attributes>
+                <Attribute Name="contains_implicit_enum" />
+              </Attributes>
+            </data>
+          </addData>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">fbStart(CLK := bStart);
+fbStop(CLK := bStop);
+bTogglePulse := NOT bTogglePulse;
+stAxis.ReadStatus();
+
+CASE eMcVelocityState OF
+	
+	WAIT:
+	
+		IF fbStart.Q AND NOT fbStop.Q THEN
+			fbAxisStop(Axis := stAxis, Execute := FALSE);
+			eMcVelocityState := ENABLE_AXIS;
+		END_IF
+		
+		
+	ENABLE_AXIS:
+		
+		fbAxisEnable(Axis := stAxis,
+			  Enable := TRUE,
+			  Enable_Positive := TRUE,
+			  Enable_Negative := TRUE,
+			  Override := 100);
+			  
+		IF stAxis.Status.Operational AND NOT fbStop.Q THEN
+			eMcVelocityState := RUN;
+		ELSIF stAxis.Status.Operational AND fbStop.Q THEN
+			eMcVelocityState := DISABLE_AXIS;
+		ELSIF stAxis.Status.Error THEN
+			eMcVelocityState := ERROR;
+		END_IF
+	
+		
+	RUN:
+	
+		fbAxisVelocity(
+			Axis         := stAxis,
+			Execute      := bTogglePulse,
+			Acceleration := fAxisAccel,
+			Deceleration := fAxisDecel,
+			Direction    := eAxisDirection,
+			BufferMode   := MC_BufferMode.MC_Aborting,
+			Velocity     := fAxisSpeed
+			);
+		
+		IF stAxis.Status.Operational AND fbStop.Q THEN
+			eMcVelocityState := STOP;
+		ELSIF stAxis.Status.Error THEN
+			eMcVelocityState := ERROR;
+		END_IF
+		
+		
+	STOP:
+		
+		fbAxisStop(			
+			Axis         := stAxis,
+			Execute      := TRUE,
+			Deceleration := fAxisDecel,
+			);
+	
+		IF stAxis.Status.NotMoving THEN
+			eMcVelocityState := DISABLE_AXIS;
+		END_IF
+			
+	
+	DISABLE_AXIS:
+	
+		fbAxisEnable(
+			Axis := stAxis,
+			Enable := FALSE,
+			Enable_Positive := FALSE,
+			Enable_Negative := FALSE,
+			Override := 0);
+			 
+		IF stAxis.Status.Disabled AND NOT stAxis.Status.Error THEN
+			eMcVelocityState := WAIT;
+		ELSIF stAxis.Status.Disabled AND stAxis.Status.Error THEN
+			eMcVelocityState := ERROR;
+		END_IF
+	
+		
+	ERROR:
+	
+		bError := TRUE;
+		
+		IF bReset THEN
+			fbAxisReset(
+				Axis := stAxis, 
+				Execute := TRUE);
+			IF NOT stAxis.Status.Error THEN
+				bError := FALSE;
+				fbAxisReset(
+					Axis := stAxis, 
+					Execute := FALSE);
+				eMcVelocityState := WAIT;
+			END_IF
+		END_IF
+		
+END_CASE
+
+
+			  
+		</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">FUNCTION_BLOCK FB_McVelocity
+
+VAR_INPUT
+	bStart					: BOOL;
+	bStop					: BOOL;
+	fAxisAccel				: REAL;
+	fAxisDecel				: REAL;
+	eAxisDirection			: MC_Direction;
+	fAxisSpeed				: REAL;
+	bReset					: BOOL;
+END_VAR
+
+VAR_OUTPUT
+	bError					: BOOL;
+END_VAR
+
+VAR
+	stAxis					: AXIS_REF;
+	fbAxisEnable			: MC_Power;
+	fbAxisVelocity			: MC_MoveVelocity;
+	fbAxisStop				: MC_Stop;
+	fbAxisReset				: MC_Reset;
+	bTogglePulse			: BOOL;
+	fbStart					: R_TRIG;
+	fbStop					: R_TRIG;
+	eMcVelocityState 		: (WAIT, ENABLE_AXIS, RUN, STOP, DISABLE_AXIS, ERROR);
+END_VAR
+</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId>1aaf948f-e46b-4451-8c89-b707b8455e80</ObjectId>
+          </data>
+        </addData>
+      </pou>
+    </pous>
+  </types>
+  <instances>
+    <configurations />
+  </instances>
+  <addData>
+    <data name="http://www.3s-software.com/plcopenxml/projectstructure" handleUnknown="discard">
+      <ProjectStructure>
+        <Object Name="FB_McVelocity" ObjectId="1aaf948f-e46b-4451-8c89-b707b8455e80" />
+      </ProjectStructure>
+    </data>
+  </addData>
+</project>
